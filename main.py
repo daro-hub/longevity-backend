@@ -20,7 +20,7 @@ app = FastAPI(
 # Configurazione CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://tuodominio.com"],  # Aggiungi il dominio di produzione
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "https://tuodominio.com"],  # Aggiungi il dominio di produzione
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -82,9 +82,11 @@ async def ask_question(request: AskRequest):
         index = pc.Index(pinecone_index_name)
         
         # Crea l'embedding della domanda usando OpenAI
+        # Usa text-embedding-3-small con dimensions=1024 per compatibilità con l'indice Pinecone
         embedding_response = openai_client.embeddings.create(
-            model="text-embedding-ada-002",
-            input=request.question
+            model="text-embedding-3-small",
+            input=request.question,
+            dimensions=1024
         )
         query_vector = embedding_response.data[0].embedding
         
@@ -148,7 +150,7 @@ Fornisci una risposta dettagliata basata esclusivamente sulle informazioni forni
 
         # Chiama GPT-4 per generare la risposta
         completion = openai_client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": user_message}
