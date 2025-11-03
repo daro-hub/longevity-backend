@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional
 import os
@@ -14,6 +15,15 @@ app = FastAPI(
     title="longevity Backend",
     description="Backend API per consulenze nutrizionali basate su AI",
     version="1.0.0"
+)
+
+# Configurazione CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "https://tuodominio.com"],  # Aggiungi il dominio di produzione
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Configurazione OpenAI

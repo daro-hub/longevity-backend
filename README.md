@@ -81,6 +81,70 @@ Puoi accedere alla documentazione interattiva su:
 - Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
 
+## 🧪 Come Testare l'API
+
+### Metodo 1: Documentazione Interattiva (Swagger UI)
+
+Il modo più semplice per testare l'API è usare la documentazione interattiva:
+
+1. Avvia il server (vedi sopra)
+2. Apri il browser e vai su `http://localhost:8000/docs`
+3. Clicca su `/ask` → **Try it out**
+4. Inserisci la tua domanda e i dati opzionali
+5. Clicca **Execute**
+
+### Metodo 2: Script Python
+
+Usa lo script di test incluso:
+
+```bash
+# Installa requests se non l'hai già fatto
+pip install requests
+
+# Esegui lo script di test
+python test_api.py
+```
+
+### Metodo 3: cURL
+
+```bash
+# Test health check
+curl http://localhost:8000/
+
+# Test endpoint /ask
+curl -X POST "http://localhost:8000/ask" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "Qual è l\'apporto giornaliero raccomandato di proteine?",
+    "user_data": {
+      "age": 30,
+      "weight": 75,
+      "height": 175
+    }
+  }'
+```
+
+### Metodo 4: Postman o Thunder Client
+
+1. Crea una nuova richiesta POST
+2. URL: `http://localhost:8000/ask`
+3. Headers: `Content-Type: application/json`
+4. Body (JSON):
+```json
+{
+  "question": "La tua domanda qui",
+  "user_data": {
+    "age": 30,
+    "weight": 75,
+    "height": 175
+  }
+}
+```
+
+### Test su Render
+
+Se hai fatto il deploy su Render, sostituisci `localhost:8000` con l'URL del tuo servizio Render (es. `https://longevity-backend-07su.onrender.com`).
+
 ## 📡 Utilizzo dell'Endpoint `/ask`
 
 ### Richiesta POST
