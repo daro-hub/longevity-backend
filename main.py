@@ -52,6 +52,7 @@ class UserData(BaseModel):
     gender: Optional[str] = Field(None, description="Genere")
     activity_level: Optional[str] = Field(None, description="Livello di attività fisica")
     goal: Optional[str] = Field(None, description="Obiettivo nutrizionale (es. perdita peso, aumento massa, mantenimento, benessere generale)")
+    dietary_preferences: Optional[str] = Field(None, description="Preferenze alimentari, intolleranze o allergie (es. vegetariano, vegano, intollerante al lattosio, allergico ai frutti di mare)")
 
 
 class AskRequest(BaseModel):
@@ -131,6 +132,8 @@ async def ask_question(request: AskRequest):
                 user_parts.append(f"Livello di attività: {request.user_data.activity_level}")
             if request.user_data.goal:
                 user_parts.append(f"Obiettivo: {request.user_data.goal}")
+            if request.user_data.dietary_preferences:
+                user_parts.append(f"Preferenze alimentari/allergie: {request.user_data.dietary_preferences}")
             
             if user_parts:
                 user_context = f"\n\nDati biometrici dell'utente:\n" + "\n".join(user_parts)
