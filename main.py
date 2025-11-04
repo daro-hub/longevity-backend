@@ -20,7 +20,7 @@ app = FastAPI(
 # Configurazione CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "https://tuodominio.com"],  # Aggiungi il dominio di produzione
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "https://longevity-alpha.vercel.app"],  # Aggiungi il dominio di produzione
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
