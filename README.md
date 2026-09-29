@@ -1,64 +1,52 @@
-# longevity Backend
+# Longevity Backend
 
-Backend FastAPI per consulenze nutrizionali basate su AI. Il sistema utilizza Pinecone come database vettoriale per recuperare documenti scientifici rilevanti e GPT-4 per generare risposte nutrizionali basate esclusivamente sulle fonti presenti nel database.
+FastAPI backend for [Longevity](https://github.com/daro-hub/longevity), an AI nutrition assistant. The system uses Pinecone as a vector database to retrieve relevant scientific documents and GPT-4 to generate nutrition answers grounded exclusively in what those sources say.
 
-## 🚀 Funzionalità
+**Live API:** https://longevity-backend-07su.onrender.com
+**Frontend repository:** https://github.com/daro-hub/longevity
 
-- Endpoint `/ask` per fare domande nutrizionali
-- Supporto per dati biometrici opzionali (età, peso, altezza, ecc.)
-- Ricerca semantica su Pinecone per documenti rilevanti
-- Generazione risposte con GPT-4 basate solo su fonti scientifiche
+## The idea
 
-## 📋 Requisiti
+Everything a nutritionist knows, they ultimately learned from documents — scientific papers, guidelines, studies. That's exactly the kind of knowledge a RAG (retrieval-augmented generation) system can consult and answer from, instead of guessing.
+
+## What it does
+
+- `POST /ask` — ask a nutrition question, answered only from indexed sources
+- Optional biometric data (age, weight, height, activity level) to personalize the answer
+- Semantic search over Pinecone to find the most relevant documents
+- GPT-4 answer generation, grounded strictly in the retrieved context — if nothing relevant is found, it says so instead of making something up
+
+## Requirements
 
 - Python 3.11+
-- Account OpenAI con API key
-- Account Pinecone con indice configurato
-- Variabili d'ambiente configurate
+- OpenAI account with an API key
+- Pinecone account with a configured index
 
-## 🛠️ Installazione Locale
+## Local setup
 
-1. **Clona il repository e naviga nella directory:**
+1. **Clone the repository:**
 
 ```bash
-cd wellneAi-backend
+git clone https://github.com/daro-hub/longevity-backend.git
+cd longevity-backend
 ```
 
-2. **Crea un ambiente virtuale:**
+2. **Create and activate a virtual environment:**
 
 ```bash
 python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
 ```
 
-3. **Attiva l'ambiente virtuale:**
-
-**Windows:**
-```bash
-venv\Scripts\activate
-```
-
-**Linux/Mac:**
-```bash
-source venv/bin/activate
-```
-
-4. **Installa le dipendenze:**
+3. **Install dependencies:**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-5. **Configura le variabili d'ambiente:**
+4. **Configure environment variables:**
 
-Copia il file `.env.example` e crea un file `.env`:
-
-```bash
-copy .env.example .env  # Windows
-# oppure
-cp .env.example .env    # Linux/Mac
-```
-
-Modifica il file `.env` con le tue chiavi API:
+Copy `.env.example` to `.env` and fill in your keys:
 
 ```env
 OPENAI_API_KEY=your-openai-api-key
@@ -67,226 +55,61 @@ PINECONE_ENVIRONMENT=us-east1-gcp
 PINECONE_INDEX_NAME=nutri-ai-knowledge
 ```
 
-## 🏃 Avvio Locale
-
-Avvia il server di sviluppo:
+5. **Run the dev server:**
 
 ```bash
 uvicorn main:app --reload
 ```
 
-Il server sarà disponibile su `http://localhost:8000`.
+The server runs at `http://localhost:8000`. Interactive docs: Swagger UI at `/docs`, ReDoc at `/redoc`.
 
-Puoi accedere alla documentazione interattiva su:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-## 🧪 Come Testare l'API
-
-### Metodo 1: Documentazione Interattiva (Swagger UI)
-
-Il modo più semplice per testare l'API è usare la documentazione interattiva:
-
-1. Avvia il server (vedi sopra)
-2. Apri il browser e vai su `http://localhost:8000/docs`
-3. Clicca su `/ask` → **Try it out**
-4. Inserisci la tua domanda e i dati opzionali
-5. Clicca **Execute**
-
-### Metodo 2: Script Python
-
-Usa lo script di test incluso:
-
-```bash
-# Installa requests se non l'hai già fatto
-pip install requests
-
-# Esegui lo script di test
-python test_api.py
-```
-
-### Metodo 3: cURL
-
-```bash
-# Test health check
-curl http://localhost:8000/
-
-# Test endpoint /ask
-curl -X POST "http://localhost:8000/ask" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "Qual è l\'apporto giornaliero raccomandato di proteine?",
-    "user_data": {
-      "age": 30,
-      "weight": 75,
-      "height": 175
-    }
-  }'
-```
-
-### Metodo 4: Postman o Thunder Client
-
-1. Crea una nuova richiesta POST
-2. URL: `http://localhost:8000/ask`
-3. Headers: `Content-Type: application/json`
-4. Body (JSON):
-```json
-{
-  "question": "La tua domanda qui",
-  "user_data": {
-    "age": 30,
-    "weight": 75,
-    "height": 175
-  }
-}
-```
-
-### Test su Render
-
-Se hai fatto il deploy su Render, sostituisci `localhost:8000` con l'URL del tuo servizio Render (es. `https://longevity-backend-07su.onrender.com`).
-
-## 📡 Utilizzo dell'Endpoint `/ask`
-
-### Richiesta POST
-
-Fai una richiesta POST a `http://localhost:8000/ask` con il seguente corpo JSON:
-
-```json
-{
-  "question": "Qual è l'apporto giornaliero raccomandato di proteine per un adulto?",
-  "user_data": {
-    "age": 25,
-    "weight": 70,
-    "height": 180,
-    "gender": "maschio",
-    "activity_level": "moderato"
-  }
-}
-```
-
-**Nota:** Il campo `user_data` è opzionale. Puoi inviare solo la domanda:
-
-```json
-{
-  "question": "Quali sono i benefici degli omega-3?"
-}
-```
-
-### Risposta
-
-La risposta sarà in formato JSON:
-
-```json
-{
-  "answer": "Secondo le fonti scientifiche disponibili..."
-}
-```
-
-### Esempio con cURL
+## Using `/ask`
 
 ```bash
 curl -X POST "http://localhost:8000/ask" \
   -H "Content-Type: application/json" \
   -d '{
-    "question": "Quante calorie dovrei assumere giornalmente?",
-    "user_data": {
-      "age": 30,
-      "weight": 75,
-      "height": 175
-    }
+    "question": "What is the recommended daily protein intake for an adult?",
+    "user_data": { "age": 30, "weight": 75, "height": 175 }
   }'
 ```
 
-### Esempio con Python
+`user_data` is optional — you can send just the question:
 
-```python
-import requests
-
-url = "http://localhost:8000/ask"
-payload = {
-    "question": "Qual è l'importanza delle vitamine nel metabolismo?",
-    "user_data": {
-        "age": 28,
-        "weight": 68,
-        "height": 170
-    }
-}
-
-response = requests.post(url, json=payload)
-print(response.json())
+```json
+{ "question": "What are the benefits of omega-3?" }
 ```
 
-## 🌐 Deploy su Render
+Response:
 
-### Configurazione
-
-1. **Crea un nuovo Web Service su Render**
-
-2. **Configura le variabili d'ambiente:**
-
-Aggiungi le seguenti variabili d'ambiente nella sezione "Environment" di Render:
-
-- `OPENAI_API_KEY`: La tua chiave API OpenAI
-- `PINECONE_API_KEY`: La tua chiave API Pinecone
-- `PINECONE_ENVIRONMENT`: Il tuo ambiente Pinecone (es. `us-east1-gcp`)
-- `PINECONE_INDEX_NAME`: Il nome del tuo indice Pinecone (es. `nutri-ai-knowledge`)
-
-3. **Configura il Build Command:**
-
-```bash
-pip install -r requirements.txt
+```json
+{ "answer": "According to the available scientific sources..." }
 ```
 
-4. **Configura il Start Command:**
+## Deploy (Render)
 
-```bash
-gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT
-```
+1. Create a new Web Service on Render
+2. Set the environment variables above in the "Environment" tab
+3. Build command: `pip install -r requirements.txt`
+4. Start command: `gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT`
 
-**Nota:** Render fornisce automaticamente la variabile `$PORT`, quindi usa quella invece di una porta fissa.
+## Code structure
 
-### Struttura del Progetto
+- `main.py` — FastAPI app, endpoints, Pinecone/OpenAI integration
+- `requirements.txt` — Python dependencies
+- `.env.example` — environment variable template
 
-Render si aspetta che il progetto abbia questa struttura:
+## Notes
 
-```
-wellneAi-backend/
-├── main.py
-├── requirements.txt
-├── .env.example
-└── README.md
-```
+- The system retrieves the **top 3** most relevant documents from Pinecone
+- Answers are generated **exclusively** from the retrieved context
+- If no relevant document is found, the API returns a 404 instead of improvising
+- Biometric data is optional but helps personalize the answer
 
-## 🔧 Struttura del Codice
+## Troubleshooting
 
-- `main.py`: Contiene l'applicazione FastAPI, gli endpoint, e la logica di integrazione con Pinecone e OpenAI
-- `requirements.txt`: Elenco delle dipendenze Python
-- `.env.example`: Template per le variabili d'ambiente
+**"OPENAI_API_KEY not found"** — make sure you created `.env` and set the variables correctly.
 
-## 📝 Note Importanti
+**"No relevant document found in Pinecone"** — check that the Pinecone index exists, contains documents with `text` or `content` metadata, and that the vector dimensions match your embedding model (1536 for `text-embedding-ada-002`).
 
-- Il sistema recupera i **top 3 documenti** più rilevanti da Pinecone
-- Le risposte sono generate **esclusivamente** basandosi sui documenti recuperati da Pinecone
-- Se non vengono trovati documenti rilevanti, viene restituito un errore 404
-- I dati biometrici sono opzionali ma possono aiutare a personalizzare la risposta
-
-## 🐛 Troubleshooting
-
-### Errore: "OPENAI_API_KEY non trovata"
-
-Assicurati di aver creato il file `.env` e configurato correttamente le variabili d'ambiente.
-
-### Errore: "Nessun documento rilevante trovato in Pinecone"
-
-Verifica che:
-- L'indice Pinecone esista e sia configurato correttamente
-- L'indice contenga documenti con metadata `text` o `content`
-- Le dimensioni dei vettori siano corrette (default: 1536 per `text-embedding-ada-002`)
-
-### Errore sulla porta su Render
-
-Render assegna automaticamente una porta. Usa sempre `$PORT` nel comando di avvio.
-
-## 📄 Licenza
-
-Questo progetto è parte del sistema wellneAi.
+**Port errors on Render** — Render assigns the port automatically; always use `$PORT` in the start command, never a hardcoded port.
