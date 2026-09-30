@@ -9,7 +9,16 @@ Two things live here, and it matters which one you're looking at:
    and a macro split from a user profile. No LLM involved, no network call,
    nothing that can hallucinate a number. Every constant it uses has a
    citation, enforced by a test — see `GET /v1/references`.
-2. **A RAG Q&A endpoint** (`POST /ask`) — Pinecone semantic search over
+2. **A constrained meal-plan pipeline** (`app/llm/`, `POST /v1/plan`) — the
+   model's output schema (`app.llm.schemas.MealPlanDraft`) carries only
+   `{food_key, grams}` per item, no calorie or macro field anywhere. Every
+   total is computed server-side from `data/foods/foods.it.json` against
+   the engine's targets; a plan outside tolerance is repaired first for
+   free (`app.domain.plan_fitting`, pure scaling/nudging, no LLM) and only
+   then, at most once, sent back to the model with the server-computed
+   deltas. If it still doesn't land, the response falls back to
+   `plan_status: "targets_only"` — never a 500, never a silently-wrong plan.
+3. **A RAG Q&A endpoint** (`POST /ask`) — Pinecone semantic search over
    indexed nutrition documents, answered by `gpt-4o-mini` grounded in the
    retrieved context.
 
@@ -22,6 +31,10 @@ the instance wakes up)
 
 - ✅ `POST /v1/targets` — deterministic engine, real citations, 100% test
   coverage on `app/domain`.
+- ✅ `POST /v1/plan` — constrained meal-plan generation. The LLM never
+  writes a number; the food database (`data/foods/foods.it.json`, ~70
+  items, Atwater-checked at load) is curated, not scraped, and only
+  ~70 items — the full-catalogue version is future work.
 - ✅ `GET /v1/references` — every numeric constant the engine uses, with
   its source.
 - ⚠️ `POST /ask` — still the original retrieval behavior (`top_k=3`, **no
@@ -30,9 +43,6 @@ the instance wakes up)
   exclusively in sources" is not yet a guarantee on this endpoint. That's
   the next piece of work (retrieval threshold + citations + a `/v1/ask`
   replacement), not something already true today.
-- ⚠️ No structured meal-plan generation yet (the "LLM never invents a
-  macro number" pipeline described in the project plan). `/ask` can be
-  asked for a diet in free text; nothing checks its arithmetic.
 - ❌ No auth, no per-user persistence yet.
 
 ## Requirements
@@ -65,9 +75,33 @@ pytest tests                                                 # everything (engin
 ruff check app tests scripts index_docs.py
 ```
 
-No test hits a real OpenAI or Pinecone API — `tests/api/test_ask.py` mocks
-both clients. There is no `RUN_LIVE_LLM` integration test yet (planned
-alongside the `/v1/ask` rework).
+No test hits a real OpenAI or Pinecone API — `tests/api/test_ask.py` and
+`tests/llm/test_planner.py` mock both. There is no `RUN_LIVE_LLM`
+integration test yet (planned alongside the `/v1/ask` rework).
+
+## Using `/v1/plan`
+
+```bash
+curl -X POST "http://localhost:8000/v1/plan" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "age_years": 30, "sex": "male", "height_cm": 175, "weight_kg": 75,
+    "activity_level": "moderate", "goal": "lose_weight", "locale": "it",
+    "excluded_tags": ["fish"]
+  }'
+```
+
+`excluded_tags` filters the food catalogue *before* it ever reaches the
+model — an excluded food is never offerable, not just discouraged by a
+prompt instruction. Response includes `targets` (same shape as
+`/v1/targets`), `plan` (the day/meal/item structure with real food names),
+and `plan_status`: `"ok"` (matched on the first try), `"repaired"` (fixed
+by scaling/nudging or one LLM repair round-trip), or `"targets_only"`
+(the plan didn't converge — the computed targets are still returned, just
+without a matching meal plan).
+
+Costs at most 2 LLM calls per request (one generation, at most one
+repair). Requires `OPENAI_API_KEY`; Pinecone is not used by this route.
 
 ## Using `/v1/targets`
 
@@ -133,16 +167,35 @@ app/
   logging_config.py       Structured logging setup.
   domain/                 The deterministic engine. Pure, no I/O. Start here:
                           engine.py::compute_targets() is the one public entrypoint.
+                          Also: food_db.py, nutrition.py, plan_fitting.py,
+                          plan_tolerance.py — the food database and the
+                          "sum everything server-side" machinery the LLM
+                          plan pipeline is built on.
+  llm/
+    schemas.py             MealPlanDraft etc. — no numeric nutrition field
+                          anywhere, by design (see module docstring).
+    validator.py            Hard-fails (unknown food, banned tag, grams out
+                          of range) vs. tolerance checks.
+    planner.py              generate -> validate -> fit_to_targets -> one
+                          LLM repair -> targets_only. LLMPlanClient is a
+                          narrow Protocol so tests use a trivial fake
+                          instead of mocking the OpenAI SDK.
+    openai_client.py        The real implementation, via Structured Outputs.
+    prompts/                plan_it.md / plan_en.md
   api/
-    routes/               health, targets, references, ask (legacy)
+    routes/               health, targets, plan, references, ask (legacy)
     schemas.py            pydantic request/response models
     mappers.py            domain dataclasses <-> API schemas
     deps.py               request-scoped deps (auth is a stub — see below)
+data/foods/foods.it.json  ~70 hand-curated foods, per-100g macros, Atwater-
+                          checked at load (scripts/generate_food_db.py
+                          regenerates it from the reviewable macro list).
 index_docs.py             Pinecone ingestion CLI. Retrieval overhaul pending
                           (page-accurate citations, content-addressed ids,
                           namespaces) — see the project plan.
 tests/
   domain/                 100% coverage, includes golden-vector snapshots
+  llm/                    validator + planner, fully mocked (no network)
   api/                    FastAPI TestClient, OpenAI/Pinecone mocked
 ```
 
@@ -156,6 +209,14 @@ tests/
 - **Citations don't exist yet** on `/ask` — `index_docs.py` currently
   stores only raw text per chunk, no source file or page number.
 - **Cold start.** Render's free tier sleeps after ~15 minutes idle.
+- **`/v1/plan`'s food catalogue is ~70 items.** Enough to prove the
+  validate-and-repair mechanism works, not enough for real variety over a
+  multi-day plan. `/v1/plan` also isn't rate-limited yet — same exposure
+  as `/ask` (see the auth gap above), and each call costs up to 2 LLM
+  requests instead of 1.
+- **`/v1/plan` currently generates one day, not a multi-day plan.** The
+  schema (`app.llm.schemas.MealPlanDraft`) already supports multiple
+  `days`, but nothing in the prompt or the API asks for more than one yet.
 
 ## Troubleshooting
 

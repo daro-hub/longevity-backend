@@ -1,0 +1,1204 @@
+[
+  {
+    "key": "riso_bianco_cotto",
+    "name_it": "Riso bianco (cotto)",
+    "name_en": "White rice (cooked)",
+    "per_100g": {
+      "kcal": 125.5,
+      "protein_g": 2.7,
+      "carb_g": 28.0,
+      "fat_g": 0.3,
+      "fiber_g": 0.4
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "riso_integrale_cotto",
+    "name_it": "Riso integrale (cotto)",
+    "name_en": "Brown rice (cooked)",
+    "per_100g": {
+      "kcal": 110.5,
+      "protein_g": 2.6,
+      "carb_g": 23.0,
+      "fat_g": 0.9,
+      "fiber_g": 1.8
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "pasta_cotta",
+    "name_it": "Pasta di semola (cotta)",
+    "name_en": "Pasta (cooked)",
+    "per_100g": {
+      "kcal": 131.3,
+      "protein_g": 5.8,
+      "carb_g": 25.0,
+      "fat_g": 0.9,
+      "fiber_g": 1.8
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "pasta_integrale_cotta",
+    "name_it": "Pasta integrale (cotta)",
+    "name_en": "Whole wheat pasta (cooked)",
+    "per_100g": {
+      "kcal": 123.1,
+      "protein_g": 5.3,
+      "carb_g": 23.0,
+      "fat_g": 1.1,
+      "fiber_g": 3.5
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "pane_bianco",
+    "name_it": "Pane bianco",
+    "name_en": "White bread",
+    "per_100g": {
+      "kcal": 260.8,
+      "protein_g": 9.0,
+      "carb_g": 49.0,
+      "fat_g": 3.2,
+      "fiber_g": 2.7
+    },
+    "tags": [
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "pane_integrale",
+    "name_it": "Pane integrale",
+    "name_en": "Whole wheat bread",
+    "per_100g": {
+      "kcal": 229.8,
+      "protein_g": 8.8,
+      "carb_g": 41.0,
+      "fat_g": 3.4,
+      "fiber_g": 7.0
+    },
+    "tags": [
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "pane_di_segale",
+    "name_it": "Pane di segale",
+    "name_en": "Rye bread",
+    "per_100g": {
+      "kcal": 235.9,
+      "protein_g": 8.5,
+      "carb_g": 48.0,
+      "fat_g": 1.1,
+      "fiber_g": 6.0
+    },
+    "tags": [
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "patate_cotte",
+    "name_it": "Patate (cotte)",
+    "name_en": "Potatoes (cooked)",
+    "per_100g": {
+      "kcal": 76.9,
+      "protein_g": 2.0,
+      "carb_g": 17.0,
+      "fat_g": 0.1,
+      "fiber_g": 2.2
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "avena_fiocchi",
+    "name_it": "Fiocchi d'avena",
+    "name_en": "Oats",
+    "per_100g": {
+      "kcal": 349.0,
+      "protein_g": 13.5,
+      "carb_g": 58.0,
+      "fat_g": 7.0,
+      "fiber_g": 10.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "quinoa_cotta",
+    "name_it": "Quinoa (cotta)",
+    "name_en": "Quinoa (cooked)",
+    "per_100g": {
+      "kcal": 118.7,
+      "protein_g": 4.4,
+      "carb_g": 21.0,
+      "fat_g": 1.9,
+      "fiber_g": 2.8
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "couscous_cotto",
+    "name_it": "Couscous (cotto)",
+    "name_en": "Couscous (cooked)",
+    "per_100g": {
+      "kcal": 109.0,
+      "protein_g": 3.8,
+      "carb_g": 23.0,
+      "fat_g": 0.2,
+      "fiber_g": 1.4
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "farro_cotto",
+    "name_it": "Farro (cotto)",
+    "name_en": "Farro (cooked)",
+    "per_100g": {
+      "kcal": 164.1,
+      "protein_g": 5.0,
+      "carb_g": 34.0,
+      "fat_g": 0.9,
+      "fiber_g": 4.6
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "orzo_cotto",
+    "name_it": "Orzo perlato (cotto)",
+    "name_en": "Pearl barley (cooked)",
+    "per_100g": {
+      "kcal": 124.8,
+      "protein_g": 2.3,
+      "carb_g": 28.0,
+      "fat_g": 0.4,
+      "fiber_g": 3.8
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "petto_di_pollo_cotto",
+    "name_it": "Petto di pollo (cotto)",
+    "name_en": "Chicken breast (cooked)",
+    "per_100g": {
+      "kcal": 156.4,
+      "protein_g": 31.0,
+      "carb_g": 0.0,
+      "fat_g": 3.6,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "petto_di_tacchino_cotto",
+    "name_it": "Petto di tacchino (cotto)",
+    "name_en": "Turkey breast (cooked)",
+    "per_100g": {
+      "kcal": 125.0,
+      "protein_g": 29.0,
+      "carb_g": 0.0,
+      "fat_g": 1.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "manzo_magro_cotto",
+    "name_it": "Manzo magro (cotto)",
+    "name_en": "Lean beef (cooked)",
+    "per_100g": {
+      "kcal": 184.0,
+      "protein_g": 28.0,
+      "carb_g": 0.0,
+      "fat_g": 8.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "vitello_cotto",
+    "name_it": "Vitello (cotto)",
+    "name_en": "Veal (cooked)",
+    "per_100g": {
+      "kcal": 156.0,
+      "protein_g": 30.0,
+      "carb_g": 0.0,
+      "fat_g": 4.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "maiale_lonza_cotta",
+    "name_it": "Lonza di maiale (cotta)",
+    "name_en": "Pork loin (cooked)",
+    "per_100g": {
+      "kcal": 153.0,
+      "protein_g": 27.0,
+      "carb_g": 0.0,
+      "fat_g": 5.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free",
+      "pork"
+    ]
+  },
+  {
+    "key": "salmone_cotto",
+    "name_it": "Salmone (cotto)",
+    "name_en": "Salmon (cooked)",
+    "per_100g": {
+      "kcal": 205.0,
+      "protein_g": 22.0,
+      "carb_g": 0.0,
+      "fat_g": 13.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free",
+      "fish"
+    ]
+  },
+  {
+    "key": "tonno_al_naturale",
+    "name_it": "Tonno al naturale",
+    "name_en": "Canned tuna (in water)",
+    "per_100g": {
+      "kcal": 109.0,
+      "protein_g": 25.0,
+      "carb_g": 0.0,
+      "fat_g": 1.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free",
+      "fish"
+    ]
+  },
+  {
+    "key": "merluzzo_cotto",
+    "name_it": "Merluzzo (cotto)",
+    "name_en": "Cod (cooked)",
+    "per_100g": {
+      "kcal": 98.3,
+      "protein_g": 23.0,
+      "carb_g": 0.0,
+      "fat_g": 0.7,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free",
+      "fish"
+    ]
+  },
+  {
+    "key": "orata_cotta",
+    "name_it": "Orata (cotta)",
+    "name_en": "Sea bream (cooked)",
+    "per_100g": {
+      "kcal": 107.0,
+      "protein_g": 20.0,
+      "carb_g": 0.0,
+      "fat_g": 3.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free",
+      "fish"
+    ]
+  },
+  {
+    "key": "gamberi_cotti",
+    "name_it": "Gamberi (cotti)",
+    "name_en": "Shrimp (cooked)",
+    "per_100g": {
+      "kcal": 106.8,
+      "protein_g": 24.0,
+      "carb_g": 0.9,
+      "fat_g": 0.8,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "gluten_free",
+      "lactose_free",
+      "fish"
+    ]
+  },
+  {
+    "key": "uovo_intero",
+    "name_it": "Uovo intero",
+    "name_en": "Whole egg",
+    "per_100g": {
+      "kcal": 138.7,
+      "protein_g": 12.6,
+      "carb_g": 0.7,
+      "fat_g": 9.5,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free",
+      "lactose_free",
+      "egg"
+    ]
+  },
+  {
+    "key": "albume_uovo",
+    "name_it": "Albume d'uovo",
+    "name_en": "Egg white",
+    "per_100g": {
+      "kcal": 48.2,
+      "protein_g": 10.9,
+      "carb_g": 0.7,
+      "fat_g": 0.2,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free",
+      "lactose_free",
+      "egg"
+    ]
+  },
+  {
+    "key": "lenticchie_cotte",
+    "name_it": "Lenticchie (cotte)",
+    "name_en": "Lentils (cooked)",
+    "per_100g": {
+      "kcal": 119.6,
+      "protein_g": 9.0,
+      "carb_g": 20.0,
+      "fat_g": 0.4,
+      "fiber_g": 8.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "ceci_cotti",
+    "name_it": "Ceci (cotti)",
+    "name_en": "Chickpeas (cooked)",
+    "per_100g": {
+      "kcal": 167.0,
+      "protein_g": 8.9,
+      "carb_g": 27.0,
+      "fat_g": 2.6,
+      "fiber_g": 7.6
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "fagioli_borlotti_cotti",
+    "name_it": "Fagioli borlotti (cotti)",
+    "name_en": "Borlotti beans (cooked)",
+    "per_100g": {
+      "kcal": 131.3,
+      "protein_g": 8.7,
+      "carb_g": 23.0,
+      "fat_g": 0.5,
+      "fiber_g": 6.4
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "fagioli_neri_cotti",
+    "name_it": "Fagioli neri (cotti)",
+    "name_en": "Black beans (cooked)",
+    "per_100g": {
+      "kcal": 136.1,
+      "protein_g": 8.9,
+      "carb_g": 24.0,
+      "fat_g": 0.5,
+      "fiber_g": 8.7
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "piselli_cotti",
+    "name_it": "Piselli (cotti)",
+    "name_en": "Peas (cooked)",
+    "per_100g": {
+      "kcal": 81.2,
+      "protein_g": 5.4,
+      "carb_g": 14.0,
+      "fat_g": 0.4,
+      "fiber_g": 5.1
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "tofu",
+    "name_it": "Tofu",
+    "name_en": "Tofu",
+    "per_100g": {
+      "kcal": 82.8,
+      "protein_g": 8.0,
+      "carb_g": 1.9,
+      "fat_g": 4.8,
+      "fiber_g": 0.3
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "tempeh",
+    "name_it": "Tempeh",
+    "name_en": "Tempeh",
+    "per_100g": {
+      "kcal": 211.0,
+      "protein_g": 19.0,
+      "carb_g": 9.0,
+      "fat_g": 11.0,
+      "fiber_g": 9.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "edamame_cotti",
+    "name_it": "Edamame (cotti)",
+    "name_en": "Edamame (cooked)",
+    "per_100g": {
+      "kcal": 129.0,
+      "protein_g": 11.0,
+      "carb_g": 10.0,
+      "fat_g": 5.0,
+      "fiber_g": 5.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "yogurt_greco_intero",
+    "name_it": "Yogurt greco intero",
+    "name_en": "Greek yogurt (full-fat)",
+    "per_100g": {
+      "kcal": 97.0,
+      "protein_g": 9.0,
+      "carb_g": 4.0,
+      "fat_g": 5.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "yogurt_greco_0",
+    "name_it": "Yogurt greco 0%",
+    "name_en": "Greek yogurt (fat-free)",
+    "per_100g": {
+      "kcal": 58.0,
+      "protein_g": 10.0,
+      "carb_g": 3.6,
+      "fat_g": 0.4,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "latte_intero",
+    "name_it": "Latte intero",
+    "name_en": "Whole milk",
+    "per_100g": {
+      "kcal": 64.4,
+      "protein_g": 3.2,
+      "carb_g": 4.8,
+      "fat_g": 3.6,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "latte_scremato",
+    "name_it": "Latte scremato",
+    "name_en": "Skimmed milk",
+    "per_100g": {
+      "kcal": 35.4,
+      "protein_g": 3.4,
+      "carb_g": 5.0,
+      "fat_g": 0.2,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "mozzarella",
+    "name_it": "Mozzarella",
+    "name_en": "Mozzarella",
+    "per_100g": {
+      "kcal": 220.0,
+      "protein_g": 18.0,
+      "carb_g": 1.0,
+      "fat_g": 16.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "ricotta",
+    "name_it": "Ricotta",
+    "name_en": "Ricotta",
+    "per_100g": {
+      "kcal": 134.0,
+      "protein_g": 8.0,
+      "carb_g": 3.0,
+      "fat_g": 10.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "parmigiano",
+    "name_it": "Parmigiano Reggiano",
+    "name_en": "Parmesan",
+    "per_100g": {
+      "kcal": 384.0,
+      "protein_g": 33.0,
+      "carb_g": 0.0,
+      "fat_g": 28.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "skyr",
+    "name_it": "Skyr",
+    "name_en": "Skyr",
+    "per_100g": {
+      "kcal": 61.8,
+      "protein_g": 11.0,
+      "carb_g": 4.0,
+      "fat_g": 0.2,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "olio_oliva",
+    "name_it": "Olio d'oliva",
+    "name_en": "Olive oil",
+    "per_100g": {
+      "kcal": 900.0,
+      "protein_g": 0.0,
+      "carb_g": 0.0,
+      "fat_g": 100.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "burro",
+    "name_it": "Burro",
+    "name_en": "Butter",
+    "per_100g": {
+      "kcal": 732.6,
+      "protein_g": 0.8,
+      "carb_g": 0.1,
+      "fat_g": 81.0,
+      "fiber_g": 0.0
+    },
+    "tags": [
+      "vegetarian",
+      "gluten_free"
+    ]
+  },
+  {
+    "key": "avocado",
+    "name_it": "Avocado",
+    "name_en": "Avocado",
+    "per_100g": {
+      "kcal": 177.0,
+      "protein_g": 2.0,
+      "carb_g": 8.5,
+      "fat_g": 15.0,
+      "fiber_g": 6.7
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "mandorle",
+    "name_it": "Mandorle",
+    "name_en": "Almonds",
+    "per_100g": {
+      "kcal": 613.0,
+      "protein_g": 21.0,
+      "carb_g": 22.0,
+      "fat_g": 49.0,
+      "fiber_g": 12.5
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free",
+      "nuts"
+    ]
+  },
+  {
+    "key": "noci",
+    "name_it": "Noci",
+    "name_en": "Walnuts",
+    "per_100g": {
+      "kcal": 701.0,
+      "protein_g": 15.0,
+      "carb_g": 14.0,
+      "fat_g": 65.0,
+      "fiber_g": 6.7
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free",
+      "nuts"
+    ]
+  },
+  {
+    "key": "arachidi",
+    "name_it": "Arachidi",
+    "name_en": "Peanuts",
+    "per_100g": {
+      "kcal": 609.0,
+      "protein_g": 26.0,
+      "carb_g": 16.0,
+      "fat_g": 49.0,
+      "fiber_g": 8.5
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free",
+      "nuts"
+    ]
+  },
+  {
+    "key": "anacardi",
+    "name_it": "Anacardi",
+    "name_en": "Cashews",
+    "per_100g": {
+      "kcal": 588.0,
+      "protein_g": 18.0,
+      "carb_g": 30.0,
+      "fat_g": 44.0,
+      "fiber_g": 3.3
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free",
+      "nuts"
+    ]
+  },
+  {
+    "key": "semi_di_chia",
+    "name_it": "Semi di chia",
+    "name_en": "Chia seeds",
+    "per_100g": {
+      "kcal": 515.0,
+      "protein_g": 17.0,
+      "carb_g": 42.0,
+      "fat_g": 31.0,
+      "fiber_g": 34.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "semi_di_lino",
+    "name_it": "Semi di lino",
+    "name_en": "Flax seeds",
+    "per_100g": {
+      "kcal": 566.0,
+      "protein_g": 18.0,
+      "carb_g": 29.0,
+      "fat_g": 42.0,
+      "fiber_g": 27.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "broccoli_cotti",
+    "name_it": "Broccoli (cotti)",
+    "name_en": "Broccoli (cooked)",
+    "per_100g": {
+      "kcal": 42.8,
+      "protein_g": 2.8,
+      "carb_g": 7.0,
+      "fat_g": 0.4,
+      "fiber_g": 3.3
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "spinaci_cotti",
+    "name_it": "Spinaci (cotti)",
+    "name_en": "Spinach (cooked)",
+    "per_100g": {
+      "kcal": 30.8,
+      "protein_g": 3.0,
+      "carb_g": 3.8,
+      "fat_g": 0.4,
+      "fiber_g": 2.4
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "zucchine_cotte",
+    "name_it": "Zucchine (cotte)",
+    "name_en": "Zucchini (cooked)",
+    "per_100g": {
+      "kcal": 19.5,
+      "protein_g": 1.2,
+      "carb_g": 3.0,
+      "fat_g": 0.3,
+      "fiber_g": 1.1
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "carote_cotte",
+    "name_it": "Carote (cotte)",
+    "name_en": "Carrots (cooked)",
+    "per_100g": {
+      "kcal": 37.9,
+      "protein_g": 0.8,
+      "carb_g": 8.0,
+      "fat_g": 0.3,
+      "fiber_g": 2.8
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "pomodori",
+    "name_it": "Pomodori",
+    "name_en": "Tomatoes",
+    "per_100g": {
+      "kcal": 21.0,
+      "protein_g": 0.9,
+      "carb_g": 3.9,
+      "fat_g": 0.2,
+      "fiber_g": 1.2
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "insalata_verde",
+    "name_it": "Insalata verde",
+    "name_en": "Green salad",
+    "per_100g": {
+      "kcal": 15.4,
+      "protein_g": 1.4,
+      "carb_g": 2.0,
+      "fat_g": 0.2,
+      "fiber_g": 1.3
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "melanzane_cotte",
+    "name_it": "Melanzane (cotte)",
+    "name_en": "Eggplant (cooked)",
+    "per_100g": {
+      "kcal": 29.0,
+      "protein_g": 0.8,
+      "carb_g": 6.0,
+      "fat_g": 0.2,
+      "fiber_g": 2.5
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "peperoni",
+    "name_it": "Peperoni",
+    "name_en": "Bell peppers",
+    "per_100g": {
+      "kcal": 30.7,
+      "protein_g": 1.0,
+      "carb_g": 6.0,
+      "fat_g": 0.3,
+      "fiber_g": 2.1
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "cavolfiore_cotto",
+    "name_it": "Cavolfiore (cotto)",
+    "name_en": "Cauliflower (cooked)",
+    "per_100g": {
+      "kcal": 25.9,
+      "protein_g": 1.8,
+      "carb_g": 4.0,
+      "fat_g": 0.3,
+      "fiber_g": 2.3
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "funghi_champignon",
+    "name_it": "Funghi champignon",
+    "name_en": "Button mushrooms",
+    "per_100g": {
+      "kcal": 28.3,
+      "protein_g": 3.1,
+      "carb_g": 3.3,
+      "fat_g": 0.3,
+      "fiber_g": 1.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "banana",
+    "name_it": "Banana",
+    "name_en": "Banana",
+    "per_100g": {
+      "kcal": 99.1,
+      "protein_g": 1.1,
+      "carb_g": 23.0,
+      "fat_g": 0.3,
+      "fiber_g": 2.6
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "mela",
+    "name_it": "Mela",
+    "name_en": "Apple",
+    "per_100g": {
+      "kcal": 59.0,
+      "protein_g": 0.3,
+      "carb_g": 14.0,
+      "fat_g": 0.2,
+      "fiber_g": 2.4
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "arancia",
+    "name_it": "Arancia",
+    "name_en": "Orange",
+    "per_100g": {
+      "kcal": 52.5,
+      "protein_g": 0.9,
+      "carb_g": 12.0,
+      "fat_g": 0.1,
+      "fiber_g": 2.4
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "fragole",
+    "name_it": "Fragole",
+    "name_en": "Strawberries",
+    "per_100g": {
+      "kcal": 37.5,
+      "protein_g": 0.7,
+      "carb_g": 8.0,
+      "fat_g": 0.3,
+      "fiber_g": 2.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "mirtilli",
+    "name_it": "Mirtilli",
+    "name_en": "Blueberries",
+    "per_100g": {
+      "kcal": 61.5,
+      "protein_g": 0.7,
+      "carb_g": 14.0,
+      "fat_g": 0.3,
+      "fiber_g": 2.4
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "kiwi",
+    "name_it": "Kiwi",
+    "name_en": "Kiwi",
+    "per_100g": {
+      "kcal": 68.9,
+      "protein_g": 1.1,
+      "carb_g": 15.0,
+      "fat_g": 0.5,
+      "fiber_g": 3.0
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "uva",
+    "name_it": "Uva",
+    "name_en": "Grapes",
+    "per_100g": {
+      "kcal": 76.2,
+      "protein_g": 0.6,
+      "carb_g": 18.0,
+      "fat_g": 0.2,
+      "fiber_g": 0.9
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "ananas",
+    "name_it": "Ananas",
+    "name_en": "Pineapple",
+    "per_100g": {
+      "kcal": 54.9,
+      "protein_g": 0.5,
+      "carb_g": 13.0,
+      "fat_g": 0.1,
+      "fiber_g": 1.4
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  },
+  {
+    "key": "pera",
+    "name_it": "Pera",
+    "name_en": "Pear",
+    "per_100g": {
+      "kcal": 62.5,
+      "protein_g": 0.4,
+      "carb_g": 15.0,
+      "fat_g": 0.1,
+      "fiber_g": 3.1
+    },
+    "tags": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "lactose_free"
+    ]
+  }
+]
