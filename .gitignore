@@ -29,6 +29,9 @@ wheels/
 venv/
 ENV/
 env/
+.venv/
+.coverage
+htmlcov/
 
 # IDE
 .vscode/

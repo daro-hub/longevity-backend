@@ -1,0 +1,405 @@
+[
+  {
+    "name": "healthy_male_maintain",
+    "input": {
+      "age_years": 30,
+      "sex": "male",
+      "height_cm": 175.0,
+      "weight_kg": 75.0,
+      "activity_level": "moderate",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "healthy_male_maintain"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 24.5,
+      "bmi_category": "normal",
+      "kcal": 2632,
+      "applied_adjustment_pct": 0.0,
+      "floor_applied": false,
+      "protein_g": 90,
+      "carb_g": 433,
+      "fat_g": 60,
+      "fiber_g": 37,
+      "hydration_ml": 2625,
+      "warning_codes": []
+    }
+  },
+  {
+    "name": "healthy_female_lose",
+    "input": {
+      "age_years": 28,
+      "sex": "female",
+      "height_cm": 165.0,
+      "weight_kg": 63.0,
+      "activity_level": "light",
+      "goal": "lose_weight",
+      "health_notes": "",
+      "name": "healthy_female_lose"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 23.1,
+      "bmi_category": "normal",
+      "kcal": 1494,
+      "applied_adjustment_pct": -0.2,
+      "floor_applied": false,
+      "protein_g": 101,
+      "carb_g": 160,
+      "fat_g": 50,
+      "fiber_g": 25,
+      "hydration_ml": 2205,
+      "warning_codes": []
+    }
+  },
+  {
+    "name": "young_male_gain",
+    "input": {
+      "age_years": 22,
+      "sex": "male",
+      "height_cm": 180.0,
+      "weight_kg": 68.0,
+      "activity_level": "active",
+      "goal": "gain_muscle",
+      "health_notes": "",
+      "name": "young_male_gain"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 21.0,
+      "bmi_category": "normal",
+      "kcal": 3228,
+      "applied_adjustment_pct": 0.1,
+      "floor_applied": false,
+      "protein_g": 122,
+      "carb_g": 523,
+      "fat_g": 72,
+      "fiber_g": 45,
+      "hydration_ml": 2380,
+      "warning_codes": []
+    }
+  },
+  {
+    "name": "obese_i_female_lose",
+    "input": {
+      "age_years": 45,
+      "sex": "female",
+      "height_cm": 160.0,
+      "weight_kg": 82.0,
+      "activity_level": "sedentary",
+      "goal": "lose_weight",
+      "health_notes": "",
+      "name": "obese_i_female_lose"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 32.0,
+      "bmi_category": "obese_class_1",
+      "kcal": 1582,
+      "applied_adjustment_pct": -0.2,
+      "floor_applied": true,
+      "protein_g": 96,
+      "carb_g": 151,
+      "fat_g": 66,
+      "fiber_g": 25,
+      "hydration_ml": 2870,
+      "warning_codes": []
+    }
+  },
+  {
+    "name": "obese_iii_male_lose",
+    "input": {
+      "age_years": 50,
+      "sex": "male",
+      "height_cm": 175.0,
+      "weight_kg": 135.0,
+      "activity_level": "sedentary",
+      "goal": "lose_weight",
+      "health_notes": "",
+      "name": "obese_iii_male_lose"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 44.1,
+      "bmi_category": "obese_class_3",
+      "kcal": 2420,
+      "applied_adjustment_pct": -0.15,
+      "floor_applied": true,
+      "protein_g": 139,
+      "carb_g": 223,
+      "fat_g": 108,
+      "fiber_g": 34,
+      "hydration_ml": 4000,
+      "warning_codes": [
+        "BMI_CLASS_III"
+      ]
+    }
+  },
+  {
+    "name": "underweight_female_lose_conflict",
+    "input": {
+      "age_years": 25,
+      "sex": "female",
+      "height_cm": 170.0,
+      "weight_kg": 52.0,
+      "activity_level": "light",
+      "goal": "lose_weight",
+      "health_notes": "",
+      "name": "underweight_female_lose_conflict"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 18.0,
+      "bmi_category": "underweight",
+      "kcal": 1786,
+      "applied_adjustment_pct": 0.0,
+      "floor_applied": false,
+      "protein_g": 62,
+      "carb_g": 290,
+      "fat_g": 42,
+      "fiber_g": 25,
+      "hydration_ml": 1820,
+      "warning_codes": [
+        "BMI_UNDERWEIGHT",
+        "GOAL_CONFLICT_DEFICIT"
+      ]
+    }
+  },
+  {
+    "name": "severe_underweight_refused",
+    "input": {
+      "age_years": 25,
+      "sex": "female",
+      "height_cm": 170.0,
+      "weight_kg": 45.0,
+      "activity_level": "sedentary",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "severe_underweight_refused"
+    },
+    "expected": {
+      "refused": true,
+      "violation_codes": [
+        "BMI_SEVERE_UNDERWEIGHT"
+      ]
+    }
+  },
+  {
+    "name": "elderly_male_maintain",
+    "input": {
+      "age_years": 70,
+      "sex": "male",
+      "height_cm": 172.0,
+      "weight_kg": 78.0,
+      "activity_level": "light",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "elderly_male_maintain"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 26.4,
+      "bmi_category": "overweight",
+      "kcal": 2074,
+      "applied_adjustment_pct": 0.0,
+      "floor_applied": false,
+      "protein_g": 94,
+      "carb_g": 285,
+      "fat_g": 62,
+      "fiber_g": 29,
+      "hydration_ml": 2730,
+      "warning_codes": []
+    }
+  },
+  {
+    "name": "very_elderly_warn",
+    "input": {
+      "age_years": 92,
+      "sex": "female",
+      "height_cm": 160.0,
+      "weight_kg": 60.0,
+      "activity_level": "sedentary",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "very_elderly_warn"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 23.4,
+      "bmi_category": "normal",
+      "kcal": 1200,
+      "applied_adjustment_pct": 0.0,
+      "floor_applied": true,
+      "protein_g": 72,
+      "carb_g": 120,
+      "fat_g": 48,
+      "fiber_g": 25,
+      "hydration_ml": 2100,
+      "warning_codes": [
+        "AGE_ELDERLY"
+      ]
+    }
+  },
+  {
+    "name": "minor_refused",
+    "input": {
+      "age_years": 15,
+      "sex": "male",
+      "height_cm": 170.0,
+      "weight_kg": 60.0,
+      "activity_level": "moderate",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "minor_refused"
+    },
+    "expected": {
+      "refused": true,
+      "violation_codes": [
+        "AGE_MINOR"
+      ]
+    }
+  },
+  {
+    "name": "child_refused",
+    "input": {
+      "age_years": 8,
+      "sex": "female",
+      "height_cm": 130.0,
+      "weight_kg": 28.0,
+      "activity_level": "moderate",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "child_refused"
+    },
+    "expected": {
+      "refused": true,
+      "violation_codes": [
+        "AGE_CHILD",
+        "WEIGHT_RANGE"
+      ]
+    }
+  },
+  {
+    "name": "pregnant_refused",
+    "input": {
+      "age_years": 29,
+      "sex": "female",
+      "height_cm": 165.0,
+      "weight_kg": 68.0,
+      "activity_level": "light",
+      "goal": "maintain",
+      "health_notes": "sono incinta di 5 mesi",
+      "name": "pregnant_refused"
+    },
+    "expected": {
+      "refused": true,
+      "violation_codes": [
+        "CONDITION_SCREEN"
+      ]
+    }
+  },
+  {
+    "name": "diabetic_refused",
+    "input": {
+      "age_years": 55,
+      "sex": "male",
+      "height_cm": 178.0,
+      "weight_kg": 90.0,
+      "activity_level": "moderate",
+      "goal": "lose_weight",
+      "health_notes": "ho il diabete di tipo 2",
+      "name": "diabetic_refused"
+    },
+    "expected": {
+      "refused": true,
+      "violation_codes": [
+        "CONDITION_SCREEN"
+      ]
+    }
+  },
+  {
+    "name": "very_active_hydration",
+    "input": {
+      "age_years": 27,
+      "sex": "male",
+      "height_cm": 182.0,
+      "weight_kg": 80.0,
+      "activity_level": "very_active",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "very_active_hydration"
+    },
+    "expected": {
+      "refused": false,
+      "bmi": 24.2,
+      "bmi_category": "normal",
+      "kcal": 3432,
+      "applied_adjustment_pct": 0.0,
+      "floor_applied": false,
+      "protein_g": 96,
+      "carb_g": 591,
+      "fat_g": 76,
+      "fiber_g": 48,
+      "hydration_ml": 3300,
+      "warning_codes": []
+    }
+  },
+  {
+    "name": "implausible_age_refused",
+    "input": {
+      "age_years": 130,
+      "sex": "male",
+      "height_cm": 175.0,
+      "weight_kg": 75.0,
+      "activity_level": "moderate",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "implausible_age_refused"
+    },
+    "expected": {
+      "refused": true,
+      "violation_codes": [
+        "AGE_IMPLAUSIBLE"
+      ]
+    }
+  },
+  {
+    "name": "implausible_height_refused",
+    "input": {
+      "age_years": 30,
+      "sex": "male",
+      "height_cm": 60.0,
+      "weight_kg": 75.0,
+      "activity_level": "moderate",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "implausible_height_refused"
+    },
+    "expected": {
+      "refused": true,
+      "violation_codes": [
+        "HEIGHT_RANGE"
+      ]
+    }
+  },
+  {
+    "name": "implausible_weight_refused",
+    "input": {
+      "age_years": 30,
+      "sex": "male",
+      "height_cm": 175.0,
+      "weight_kg": 400.0,
+      "activity_level": "moderate",
+      "goal": "maintain",
+      "health_notes": "",
+      "name": "implausible_weight_refused"
+    },
+    "expected": {
+      "refused": true,
+      "violation_codes": [
+        "WEIGHT_RANGE"
+      ]
+    }
+  }
+]

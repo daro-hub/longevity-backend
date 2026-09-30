@@ -8,12 +8,12 @@ li processa in chunk, crea gli embedding e li carica nel database vettoriale Pin
 import os
 import sys
 from pathlib import Path
-from typing import List, Tuple
+
 from dotenv import load_dotenv
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from openai import OpenAI
 from pinecone import Pinecone
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFLoader, TextLoader
 
 # Carica le variabili d'ambiente
 load_dotenv()
@@ -49,7 +49,7 @@ BATCH_SIZE = 50
 DATA_DIR = Path("data")
 
 
-def load_documents() -> List[Tuple[str, str]]:
+def load_documents() -> list[tuple[str, str]]:
     """
     Carica tutti i file PDF e TXT dalla cartella data/.
     
@@ -101,7 +101,7 @@ def load_documents() -> List[Tuple[str, str]]:
     return documents
 
 
-def split_text_into_chunks(text: str) -> List[str]:
+def split_text_into_chunks(text: str) -> list[str]:
     """
     Divide il testo in chunk usando RecursiveCharacterTextSplitter.
     
@@ -122,7 +122,7 @@ def split_text_into_chunks(text: str) -> List[str]:
     return chunks
 
 
-def create_embeddings(texts: List[str]) -> List[List[float]]:
+def create_embeddings(texts: list[str]) -> list[list[float]]:
     """
     Crea gli embedding per una lista di testi usando OpenAI.
     
@@ -140,7 +140,7 @@ def create_embeddings(texts: List[str]) -> List[List[float]]:
         )
         return [item.embedding for item in response.data]
     except Exception as e:
-        raise Exception(f"Errore nella creazione degli embedding: {str(e)}")
+        raise Exception(f"Errore nella creazione degli embedding: {str(e)}") from e
 
 
 def ensure_index_exists():
@@ -161,7 +161,7 @@ def ensure_index_exists():
         print(f"[OK] Indice '{PINECONE_INDEX_NAME}' già esistente")
 
 
-def upsert_batch(index, vectors_batch: List[dict]):
+def upsert_batch(index, vectors_batch: list[dict]):
     """
     Esegue l'upsert di un batch di vettori in Pinecone.
     
@@ -172,7 +172,7 @@ def upsert_batch(index, vectors_batch: List[dict]):
     try:
         index.upsert(vectors=vectors_batch)
     except Exception as e:
-        raise Exception(f"Errore nell'upsert su Pinecone: {str(e)}")
+        raise Exception(f"Errore nell'upsert su Pinecone: {str(e)}") from e
 
 
 def main():
@@ -193,7 +193,7 @@ def main():
             return
         
         # 3. Divide in chunk
-        print(f"\n[*] Divisione dei documenti in chunk...")
+        print("\n[*] Divisione dei documenti in chunk...")
         all_chunks = []
         for file_path, text in documents:
             chunks = split_text_into_chunks(text)
@@ -210,7 +210,7 @@ def main():
         index = pc.Index(PINECONE_INDEX_NAME)
         
         # 5. Processa i chunk in batch
-        print(f"\n[>] Creazione embedding e caricamento in Pinecone...")
+        print("\n[>] Creazione embedding e caricamento in Pinecone...")
         
         total_uploaded = 0
         chunk_id_counter = 1
@@ -228,7 +228,7 @@ def main():
                 
                 # Prepara i vettori per Pinecone
                 vectors_batch = []
-                for chunk_text, embedding in zip(batch_chunks, embeddings):
+                for chunk_text, embedding in zip(batch_chunks, embeddings, strict=True):
                     vectors_batch.append({
                         "id": f"id-{chunk_id_counter}",
                         "values": embedding,

@@ -1,0 +1,31 @@
+# Infrastructure-as-code for the Render deploy. Previously this
+# configuration existed only as prose in README.md ("build command",
+# "start command"), which meant the running config was unversioned and
+# unreproducible. This file is the source of truth; update the dashboard
+# to match it (Render's "Blueprint" sync can also apply it directly).
+services:
+  - type: web
+    name: longevity-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -k uvicorn.workers.UvicornWorker main:app
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_CHAT_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: OPENAI_EMBEDDING_DIMENSIONS
+        value: "1024"
+      - key: PINECONE_API_KEY
+        sync: false
+      - key: PINECONE_INDEX_NAME
+        sync: false
+      - key: PINECONE_NAMESPACE
+        value: ""
+      - key: CORS_ALLOW_ORIGINS
+        value: "https://longevity-alpha.vercel.app"
+      - key: LOG_LEVEL
+        value: INFO
