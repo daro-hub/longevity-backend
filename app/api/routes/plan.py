@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import logging
 import uuid
 
@@ -27,6 +28,24 @@ def _food_db():
     if _FOOD_DB is None:
         _FOOD_DB = load_food_db()
     return _FOOD_DB
+
+
+def _enrich_plan_with_names(plan_dict: dict | None, food_db: dict, locale: str) -> dict | None:
+    """Adds a human-readable `name` to every item, resolved from the food
+    database by locale. The LLM schema itself never carries a name field
+    (or any other field beyond food_key/grams/note) -- this is a display
+    enrichment applied server-side after generation, not something the
+    model produces.
+    """
+    if plan_dict is None:
+        return None
+    enriched = copy.deepcopy(plan_dict)
+    for day in enriched.get("days", []):
+        for meal in day.get("meals", []):
+            for item in meal.get("items", []):
+                food = food_db.get(item["food_key"])
+                item["name"] = food.name(locale) if food else item["food_key"]
+    return enriched
 
 
 class PlanRequest(ProfileIn):
@@ -98,7 +117,7 @@ async def post_plan(request: Request, body: PlanRequest) -> PlanResponse:
         refused=False,
         plan_status=result.plan_status,
         targets=mapped.targets,
-        plan=result.plan,
+        plan=_enrich_plan_with_names(result.plan, _food_db(), body.locale),
         violations=mapped.violations,
         disclaimer=disclaimer,
     )

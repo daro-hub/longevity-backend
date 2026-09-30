@@ -129,6 +129,30 @@ def test_plan_not_configured_returns_503(monkeypatch):
     get_settings.cache_clear()
 
 
+def test_plan_items_have_human_readable_names(monkeypatch):
+    fake_openai = MagicMock()
+
+    class FakeOpenAIPlanClient:
+        def __init__(self, client):
+            pass
+
+        def create_plan(self, system_prompt, catalogue, locale):
+            return _fake_draft()
+
+        def repair_plan(self, *a, **k):
+            return _fake_draft()
+
+    monkeypatch.setattr("app.clients.get_openai_client", lambda: fake_openai)
+    monkeypatch.setattr("app.api.routes.plan.OpenAIPlanClient", FakeOpenAIPlanClient)
+
+    r = client.post("/v1/plan", json=VALID_PROFILE)
+    body = r.json()
+    if body["plan"] is not None:
+        item = body["plan"]["days"][0]["meals"][0]["items"][0]
+        assert item["name"]
+        assert item["food_key"] in ("riso_bianco_cotto", "petto_di_pollo_cotto", "olio_oliva")
+
+
 def test_plan_excludes_requested_tags(monkeypatch):
     fake_openai = MagicMock()
     seen_catalogues = []

@@ -1,0 +1,11 @@
+# Maps a source filename (in data/corpus/) to the citation metadata that
+# every chunk from it will carry. Ingestion refuses to index any file not
+# listed here (see app/rag/ingest.py) — that single rule is what makes
+# "CREA 2018, p. 42" possible for every chunk instead of most of them.
+crea-linee-guida-2018.pdf:
+  doc_id: crea-2018
+  title: "Linee Guida per una Sana Alimentazione — Revisione 2018"
+  publisher: "CREA (Consiglio per la ricerca in agricoltura e l'analisi dell'economia agraria)"
+  year: 2018
+  lang: it
+  url: "https://www.crea.gov.it/web/alimenti-e-nutrizione/-/linee-guida-per-una-sana-alimentazione-2018"

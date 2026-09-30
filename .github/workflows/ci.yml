@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
       - name: Lint
-        run: ruff check app tests scripts index_docs.py
+        run: ruff check app tests scripts
       - name: Domain engine coverage gate (100%)
         run: pytest tests/domain --cov=app.domain --cov-report=term-missing --cov-fail-under=100
       - name: Full test suite

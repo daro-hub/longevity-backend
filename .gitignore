@@ -44,3 +44,7 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
+# RAG corpus source documents (PDFs/TXT) -- only data/manifest.yaml, the
+# citation metadata, is tracked. Re-download per data/manifest.yaml.
+data/corpus/
+

@@ -18,9 +18,15 @@ Two things live here, and it matters which one you're looking at:
    then, at most once, sent back to the model with the server-computed
    deltas. If it still doesn't land, the response falls back to
    `plan_status: "targets_only"` — never a 500, never a silently-wrong plan.
-3. **A RAG Q&A endpoint** (`POST /ask`) — Pinecone semantic search over
-   indexed nutrition documents, answered by `gpt-4o-mini` grounded in the
-   retrieved context.
+3. **A retrieval-honest Q&A endpoint** (`app/rag/`, `POST /v1/ask`) —
+   Pinecone semantic search with an actual similarity threshold: below it,
+   the LLM isn't called at all and a deterministic "not in my sources"
+   message is returned instead. Chunks carry page-accurate citations
+   (`app/rag/paging.py` resolves a chunk's character offsets back to the
+   PDF page it came from) and content-addressed ids (re-ingesting
+   unchanged text is a no-op instead of overwriting a positional slot).
+   The legacy `POST /ask` (no threshold, no citations, `top_k=3` always
+   trusted) still exists unmodified until the frontend switches over.
 
 **Live API:** https://longevity-backend-07su.onrender.com (free tier — the
 first request after ~15 minutes of inactivity can take up to 25-30s while
@@ -37,12 +43,16 @@ the instance wakes up)
   ~70 items — the full-catalogue version is future work.
 - ✅ `GET /v1/references` — every numeric constant the engine uses, with
   its source.
-- ⚠️ `POST /ask` — still the original retrieval behavior (`top_k=3`, **no
-  similarity threshold**, no citations returned). It will answer with
-  whatever it retrieves even if nothing relevant exists — "grounded
-  exclusively in sources" is not yet a guarantee on this endpoint. That's
-  the next piece of work (retrieval threshold + citations + a `/v1/ask`
-  replacement), not something already true today.
+- ✅ `POST /v1/ask` — similarity threshold (below it, no LLM call, an
+  instant deterministic refusal), page-accurate citations, content-
+  addressed vector ids. **Not yet tuned against a real labeled eval
+  set** (`scripts/tune_threshold.py` doesn't exist yet, and the corpus
+  hasn't been ingested into Pinecone yet either — `RETRIEVAL_MIN_SCORE`
+  in `app/domain/references.py` is a documented placeholder). The corpus
+  itself is one document so far: CREA's 2018 Italian dietary guidelines
+  (`data/manifest.yaml`).
+- ⚠️ `POST /ask` — kept unmodified (`top_k=3`, no threshold, no
+  citations) until the frontend moves to `/v1/ask`. Will be deleted then.
 - ❌ No auth, no per-user persistence yet.
 
 ## Requirements
@@ -72,12 +82,29 @@ Server runs at `http://localhost:8000`. Swagger UI at `/docs`, ReDoc at
 ```bash
 pytest tests/domain --cov=app.domain --cov-fail-under=100   # the engine, 100% covered
 pytest tests                                                 # everything (engine + API, mocked)
-ruff check app tests scripts index_docs.py
+ruff check app tests scripts
 ```
 
-No test hits a real OpenAI or Pinecone API — `tests/api/test_ask.py` and
-`tests/llm/test_planner.py` mock both. There is no `RUN_LIVE_LLM`
-integration test yet (planned alongside the `/v1/ask` rework).
+No test hits a real OpenAI or Pinecone API — `tests/api/test_ask.py`,
+`tests/api/test_ask_v1.py`, and `tests/llm/test_planner.py` all mock both.
+There is no `RUN_LIVE_LLM` integration test yet.
+
+## Using `/v1/ask`
+
+```bash
+curl -X POST "http://localhost:8000/v1/ask" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Quante porzioni di frutta e verdura al giorno?", "locale": "it"}'
+```
+
+Response: `{"answer": "...[1]...", "grounded": true, "citations": [{"n": 1, "doc_id": "crea-2018", "title": "...", "page": "42", "score": 0.51, "snippet": "...", "url": "..."}], "disclaimer": "..."}`.
+
+The model may only cite by writing `[n]` — never a document name or page
+number itself (those are attached server-side from the citation array;
+any `[n]` outside range is stripped before the response goes out). If
+nothing clears `RETRIEVAL_MIN_SCORE`, `grounded` is `false`, `citations`
+is empty, and the LLM is never called — the answer is a static,
+localized "not in my sources" message.
 
 ## Using `/v1/plan`
 
@@ -146,6 +173,25 @@ curl -X POST "http://localhost:8000/ask" \
 `user_data` is optional. See the "Current state" section above for what
 this endpoint does *not* yet guarantee.
 
+## Ingesting the corpus
+
+```bash
+python scripts/index_docs.py --namespace v2
+```
+
+Every source file must be listed in `data/manifest.yaml` (filename ->
+doc_id/title/publisher/year/lang/url) — ingestion refuses an unlisted
+file, because a filename alone ("crea-linee-guida-2018.pdf, p. 42") is a
+useless citation. Source PDFs themselves live in `data/corpus/` and are
+gitignored (not committed — only the manifest is), so a fresh checkout
+needs them added back before this script has anything to index.
+
+`--namespace` is required with no default: pointing this at the wrong
+namespace and passing `--delete-existing --yes-really` is destructive for
+that namespace specifically, which is the point of not defaulting it.
+Re-running on unchanged text is a no-op (content-addressed ids), and a
+partially-failed run exits non-zero instead of printing a false "success".
+
 ## Deploy (Render)
 
 Configuration lives in `render.yaml` (previously this existed only as prose
@@ -182,20 +228,39 @@ app/
                           instead of mocking the OpenAI SDK.
     openai_client.py        The real implementation, via Structured Outputs.
     prompts/                plan_it.md / plan_en.md
+  rag/
+    manifest.py             Loads + validates data/manifest.yaml; the
+                          enforcement point for "no unlisted file".
+    paging.py               PageMap — resolves a character offset back to
+                          the PDF page it came from.
+    chunking.py             Text splitting with offsets preserved.
+    ids.py                  Content-addressed vector ids.
+    ingest.py               Pure chunk assembly (manifest + pages ->
+                          citable, content-addressed chunks). No network.
+    retrieve.py             Query-side: embed, query Pinecone, keep only
+                          matches above RETRIEVAL_MIN_SCORE.
+    citations.py            Numbered context blocks <-> structured
+                          citations array; strips out-of-range [n] markers.
   api/
-    routes/               health, targets, plan, references, ask (legacy)
+    routes/               health, targets, plan, ask_v1, references, ask (legacy)
     schemas.py            pydantic request/response models
     mappers.py            domain dataclasses <-> API schemas
     deps.py               request-scoped deps (auth is a stub — see below)
-data/foods/foods.it.json  ~70 hand-curated foods, per-100g macros, Atwater-
+data/
+  foods/foods.it.json     ~70 hand-curated foods, per-100g macros, Atwater-
                           checked at load (scripts/generate_food_db.py
                           regenerates it from the reviewable macro list).
-index_docs.py             Pinecone ingestion CLI. Retrieval overhaul pending
-                          (page-accurate citations, content-addressed ids,
-                          namespaces) — see the project plan.
+  manifest.yaml           Corpus documents this repo can cite. Tracked in
+                          git; the PDFs themselves (data/corpus/) are not.
+scripts/
+  index_docs.py           Pinecone ingestion CLI — thin wrapper around
+                          app/rag/ingest.py.
+  generate_food_db.py      Regenerates data/foods/foods.it.json.
 tests/
   domain/                 100% coverage, includes golden-vector snapshots
   llm/                    validator + planner, fully mocked (no network)
+  rag/                    paging/manifest/ingest/retrieve/citations, all
+                          pure logic, no network, no real PDF required
   api/                    FastAPI TestClient, OpenAI/Pinecone mocked
 ```
 
@@ -205,9 +270,15 @@ tests/
   your OpenAI/Pinecone quota. `app/api/deps.py::current_user_stub` is a
   placeholder for Supabase JWT verification, not a security boundary.
 - **`/ask` retrieval has no relevance threshold.** It always returns the
-  3 nearest vectors, relevant or not.
-- **Citations don't exist yet** on `/ask` — `index_docs.py` currently
-  stores only raw text per chunk, no source file or page number.
+  3 nearest vectors, relevant or not. (`/v1/ask` fixes this; `/ask` is
+  kept unmodified until the frontend switches over, then deleted.)
+- **`RETRIEVAL_MIN_SCORE` is an unvalidated placeholder.** No corpus has
+  been ingested into Pinecone yet (blocked on `OPENAI_API_KEY` /
+  `PINECONE_API_KEY` being filled in) and `scripts/tune_threshold.py`
+  (empirical threshold tuning against a labeled query set) doesn't exist
+  yet either. Don't trust the current threshold value as tuned.
+- **The corpus is one document.** CREA's 2018 Italian dietary guidelines.
+  Real variety needs more sources in `data/manifest.yaml`.
 - **Cold start.** Render's free tier sleeps after ~15 minutes idle.
 - **`/v1/plan`'s food catalogue is ~70 items.** Enough to prove the
   validate-and-repair mechanism works, not enough for real variety over a

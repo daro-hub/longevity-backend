@@ -19,3 +19,4 @@ python-dotenv==1.2.3
 langchain-text-splitters==1.1.2
 langchain-community==0.4.2
 pypdf==6.19.0
+PyYAML==6.0.3
