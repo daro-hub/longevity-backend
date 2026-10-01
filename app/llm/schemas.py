@@ -52,3 +52,17 @@ class MealPlanDraft(StrictModel):
 
     def to_plain_dict(self) -> dict:
         return self.model_dump(mode="json")
+
+
+class PartialPlanDraft(StrictModel):
+    """Response shape for a scoped edit (app.llm.planner.regenerate_scope):
+    the model fills in ONLY the open slots it was asked about, as a flat
+    ordered list matching the open positions 1:1 -- no day/meal nesting,
+    since the caller already knows which slots are open and just needs
+    the replacement items in that same order.
+    """
+
+    items: list[PlanItemDraft]
+
+    def to_plain_items(self) -> list[dict]:
+        return [item.model_dump(mode="json") for item in self.items]

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import json
 
-from app.llm.schemas import MealPlanDraft
+from app.llm.schemas import MealPlanDraft, PartialPlanDraft
 
 MODEL = "gpt-4o-mini"
 TEMPERATURE = 0.2
@@ -23,7 +23,7 @@ class OpenAIPlanClient:
         self._client = client
         self._model = model
 
-    def _complete(self, messages: list[dict]) -> MealPlanDraft:
+    def _complete(self, messages: list[dict], response_model, schema_name: str):
         completion = self._client.chat.completions.create(
             model=self._model,
             messages=messages,
@@ -31,16 +31,16 @@ class OpenAIPlanClient:
             response_format={
                 "type": "json_schema",
                 "json_schema": {
-                    "name": "meal_plan_draft",
+                    "name": schema_name,
                     "strict": True,
-                    "schema": MealPlanDraft.model_json_schema(),
+                    "schema": response_model.model_json_schema(),
                 },
             },
         )
         content = completion.choices[0].message.content
         if not content:
             raise ValueError("empty completion from model")
-        return MealPlanDraft.model_validate(json.loads(content))
+        return response_model.model_validate(json.loads(content))
 
     def create_plan(self, system_prompt: str, catalogue: list[dict], locale: str) -> MealPlanDraft:
         catalogue_json = json.dumps(catalogue, ensure_ascii=False)
@@ -48,7 +48,9 @@ class OpenAIPlanClient:
             [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": f"Catalogo alimenti disponibili:\n{catalogue_json}"},
-            ]
+            ],
+            MealPlanDraft,
+            "meal_plan_draft",
         )
 
     def repair_plan(
@@ -66,5 +68,43 @@ class OpenAIPlanClient:
                 {"role": "user", "content": f"Catalogo alimenti disponibili:\n{catalogue_json}"},
                 {"role": "assistant", "content": previous_draft.model_dump_json()},
                 {"role": "user", "content": repair_note},
-            ]
+            ],
+            MealPlanDraft,
+            "meal_plan_draft",
+        )
+
+    def generate_partial(
+        self, system_prompt: str, catalogue: list[dict], context: str, locale: str
+    ) -> PartialPlanDraft:
+        catalogue_json = json.dumps(catalogue, ensure_ascii=False)
+        return self._complete(
+            [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Catalogo alimenti disponibili:\n{catalogue_json}"},
+                {"role": "user", "content": context},
+            ],
+            PartialPlanDraft,
+            "partial_plan_draft",
+        )
+
+    def repair_partial(
+        self,
+        system_prompt: str,
+        catalogue: list[dict],
+        context: str,
+        previous_partial: PartialPlanDraft,
+        repair_note: str,
+        locale: str,
+    ) -> PartialPlanDraft:
+        catalogue_json = json.dumps(catalogue, ensure_ascii=False)
+        return self._complete(
+            [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Catalogo alimenti disponibili:\n{catalogue_json}"},
+                {"role": "user", "content": context},
+                {"role": "assistant", "content": previous_partial.model_dump_json()},
+                {"role": "user", "content": repair_note},
+            ],
+            PartialPlanDraft,
+            "partial_plan_draft",
         )

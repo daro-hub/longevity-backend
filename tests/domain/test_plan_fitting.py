@@ -19,6 +19,76 @@ def test_empty_items_fails_cleanly():
     assert result.items == []
 
 
+class TestLockedIndices:
+    """A scoped edit (swap one ingredient, regenerate one meal) must
+    leave every OTHER item bit-for-bit identical to how it went in --
+    these tests are the contract that makes that promise checkable.
+    """
+
+    def test_locked_item_grams_are_never_changed_by_scaling(self):
+        items = [
+            PlanItem(food_key="riso_bianco_cotto", grams=200),  # locked
+            PlanItem(food_key="petto_di_pollo_cotto", grams=50),  # open
+        ]
+        macros = make_macros(3000, 200, 300, 100, 30)  # far off -> forces scaling
+        result = fit_to_targets(items, 3000.0, macros, DB, locked_indices=frozenset({0}))
+        assert result.items[0].grams == 200
+        assert result.items[0].food_key == "riso_bianco_cotto"
+
+    def test_locked_item_is_never_chosen_for_greedy_nudge(self):
+        # Rice (locked) and chicken (open) -- protein is short, but the
+        # highest-protein-density item (chicken) is open, so it should be
+        # nudged instead of rice staying put by chance. Prove rice truly
+        # never moves even across repeated iterations.
+        items = [
+            PlanItem(food_key="riso_bianco_cotto", grams=200),
+            PlanItem(food_key="petto_di_pollo_cotto", grams=50),
+        ]
+        totals = total_macros(items, DB)
+        macros = make_macros(totals.kcal, totals.protein_g + 20, totals.carb_g, totals.fat_g, totals.fiber_g)
+        result = fit_to_targets(items, totals.kcal, macros, DB, locked_indices=frozenset({0}))
+        assert result.items[0].grams == 200  # rice untouched
+        assert result.items[1].grams != 50  # chicken is what moved
+
+    def test_open_items_absorb_the_full_remainder_when_locked_is_off_target(self):
+        # Locked item alone already overshoots kcal -- the open item must
+        # still come out clamped sanely (scale factor bounded), not NaN
+        # or negative.
+        items = [
+            PlanItem(food_key="olio_oliva", grams=100),  # locked, ~900kcal alone
+            PlanItem(food_key="insalata_verde", grams=50),  # open
+        ]
+        macros = make_macros(1000, 10, 20, 90, 5)
+        result = fit_to_targets(items, 1000.0, macros, DB, locked_indices=frozenset({0}))
+        assert result.items[0].grams == 100
+        assert result.items[1].grams >= ref_min_grams()
+
+    def test_all_items_locked_returns_as_is_without_crashing(self):
+        items = [PlanItem(food_key="riso_bianco_cotto", grams=200)]
+        macros = make_macros(3000, 200, 300, 100, 30)
+        result = fit_to_targets(items, 3000.0, macros, DB, locked_indices=frozenset({0}))
+        assert result.items[0].grams == 200
+        assert result.iterations == 0
+
+    def test_no_locked_indices_behaves_exactly_as_before(self):
+        items = [
+            PlanItem(food_key="riso_bianco_cotto", grams=300),
+            PlanItem(food_key="petto_di_pollo_cotto", grams=250),
+            PlanItem(food_key="olio_oliva", grams=20),
+        ]
+        totals = total_macros(items, DB)
+        macros = make_macros(totals.kcal, totals.protein_g, totals.carb_g, totals.fat_g, totals.fiber_g)
+        result = fit_to_targets(items, totals.kcal, macros, DB)
+        assert result.success
+        assert result.iterations == 1
+
+
+def ref_min_grams():
+    from app.domain import references as ref
+
+    return ref.PLAN_ITEM_GRAMS_MIN
+
+
 def test_already_within_tolerance_returns_unchanged():
     # Construct items whose totals are already close to target.
     items = [
