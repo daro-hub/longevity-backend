@@ -64,6 +64,7 @@ class FakeLLMClient:
 
     def create_plan(self, system_prompt, catalogue, locale):
         self.calls.append("create")
+        self.last_system_prompt = system_prompt
         return self._queue.pop(0)
 
     def repair_plan(self, system_prompt, catalogue, previous_draft, repair_note, locale):
@@ -191,3 +192,21 @@ def test_at_most_one_repair_call_ever():
     client = FakeLLMClient(always_bad, still_bad_1)
     generate_plan(client, targets, DB, excluded_tags=(), locale="it")
     assert client.calls.count("repair") <= 1
+
+
+def test_extra_instruction_is_appended_to_the_system_prompt():
+    targets = make_targets()
+    base = _draft(("lunch", [("riso_bianco_cotto", 250), ("petto_di_pollo_cotto", 200)]))
+    client = FakeLLMClient(base, base)
+    generate_plan(
+        client, targets, DB, excluded_tags=(), locale="it", extra_instruction="un solo pasto al giorno"
+    )
+    assert "un solo pasto al giorno" in client.last_system_prompt
+
+
+def test_no_extra_instruction_leaves_prompt_unchanged():
+    targets = make_targets()
+    base = _draft(("lunch", [("riso_bianco_cotto", 250), ("petto_di_pollo_cotto", 200)]))
+    client_without = FakeLLMClient(base, base)
+    generate_plan(client_without, targets, DB, excluded_tags=(), locale="it")
+    assert "Richiesta strutturale aggiuntiva" not in client_without.last_system_prompt

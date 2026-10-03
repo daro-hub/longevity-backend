@@ -61,16 +61,21 @@ def _prompts_dir():
     return _PROMPTS_DIR
 
 
-def _load_prompt(locale: str, targets: Targets) -> str:
+def _load_prompt(locale: str, targets: Targets, extra_instruction: str = "") -> str:
     filename = "plan_en.md" if locale == "en" else "plan_it.md"
     template = (_prompts_dir() / filename).read_text(encoding="utf-8")
-    return template.format(
+    base = template.format(
         kcal=targets.calories.kcal,
         protein_g=targets.macros.protein_g,
         carb_g=targets.macros.carb_g,
         fat_g=targets.macros.fat_g,
         fiber_g=targets.macros.fiber_g,
     )
+    if not extra_instruction:
+        return base
+    if locale == "en":
+        return f"{base}\n\nAdditional structural request from the user: {extra_instruction}"
+    return f"{base}\n\nRichiesta strutturale aggiuntiva dell'utente: {extra_instruction}"
 
 
 class LLMPlanClient(Protocol):
@@ -188,9 +193,18 @@ def generate_plan(
     food_db: dict[str, FoodItem],
     excluded_tags: tuple[str, ...],
     locale: str,
+    extra_instruction: str = "",
 ) -> PlanResult:
+    """extra_instruction carries a user's STRUCTURAL request (e.g. "only
+    one meal a day", "make it vegetarian overall") -- something that
+    changes the shape of the plan itself, not a specific ingredient. A
+    scoped edit (regenerate_scope) can't express that; this is a full
+    regeneration with the request appended to the system prompt as an
+    extra constraint, still going through the exact same validate -> fit
+    -> repair -> targets_only pipeline below.
+    """
     catalogue_foods = filter_foods(food_db, exclude_tags=excluded_tags)
-    system_prompt = _load_prompt(locale, targets)
+    system_prompt = _load_prompt(locale, targets, extra_instruction)
     catalogue = _catalogue_payload(catalogue_foods, locale)
 
     draft = llm_client.create_plan(system_prompt, catalogue, locale)

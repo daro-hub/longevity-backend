@@ -130,6 +130,56 @@ without a matching meal plan).
 Costs at most 2 LLM calls per request (one generation, at most one
 repair). Requires `OPENAI_API_KEY`; Pinecone is not used by this route.
 
+## Editing an existing plan: `/v1/plan/alternatives`, `/v1/plan/edit`, `/v1/plan/chat`
+
+Three ways to change a plan the user already has, from cheapest to most
+flexible:
+
+**`POST /v1/plan/alternatives`** — no LLM at all. `{"food_key": "petto_di_pollo_cotto", "n": 3}`
+returns the nearest foods in macro-density space (`app.domain.substitutes`,
+pure distance calculation over the food DB). Instant, free, and immune to
+hallucination because nothing is generated — only compared.
+
+**`POST /v1/plan/edit`** — a structured scoped edit: swap one ingredient,
+regenerate one meal/day, or an arbitrary multi-select, while every item
+NOT in scope comes back bit-for-bit identical to how it went in.
+```json
+{
+  "age_years": 30, "sex": "male", "height_cm": 175, "weight_kg": 75,
+  "activity_level": "moderate", "goal": "lose_weight", "locale": "it",
+  "plan": { "...": "the current plan, as returned by /v1/plan" },
+  "scope": {"kind": "item", "day_index": 0, "meal_index": 1, "item_index": 0},
+  "instruction": "qualcosa con meno grassi"
+}
+```
+`scope.kind` is one of `plan|day|meal|item|selection` (`selection` takes a
+`positions: [[day,meal,item], ...]` list instead of single indices). The
+model is only ever shown the open slot(s) — locked items are never shown
+to it, so there's nothing for it to "helpfully" rewrite there — but
+validation still runs against the WHOLE merged plan, never the open
+slice in isolation.
+
+**`POST /v1/plan/chat`** — free text instead of a structured scope:
+`{"message": "scambia il pollo con qualcosa di più leggero", ...same profile+plan fields...}`.
+An intent-classification call (`app.llm.intent`, Structured Outputs,
+temperature 0) turns the message into one of:
+  - `regenerate_scope` — resolves which exact position(s) the user means
+    from a numbered listing of the plan, then calls the same mechanism
+    `/v1/plan/edit` uses.
+  - `regenerate_full` — a STRUCTURAL request ("un solo pasto al giorno",
+    "rendilo vegetariano") that changes the plan's shape, not a specific
+    ingredient. Runs a full regeneration with the request appended to the
+    system prompt as an extra constraint.
+  - `get_alternatives` — same as `/v1/plan/alternatives`, no plan mutation.
+  - `clarify` — the request was ambiguous; returns a short question
+    instead of guessing a position.
+
+Response: `{"reply": "...", "plan": {...}|null, "plan_status": "...", "alternatives": [...]|null, ...}`.
+Costs up to 3 LLM calls (intent parse + up to 2 for the underlying
+regenerate/generate call). Nothing about arriving via free text relaxes
+validation — the exact same validate → fit → one repair → targets_only
+pipeline runs regardless of which of the three routes triggered it.
+
 ## Using `/v1/targets`
 
 ```bash
@@ -228,6 +278,13 @@ app/
                           instead of mocking the OpenAI SDK.
     openai_client.py        The real implementation, via Structured Outputs.
     prompts/                plan_it.md / plan_en.md
+    scope.py                 EditScope (plan/day/meal/item/selection) <->
+                          a set of (day,meal,item) positions. The
+                          mechanism under every scoped edit.
+    intent.py                Free text -> structured ChatIntent (Structured
+                          Outputs, temperature 0). Never decides a number,
+                          only which deterministic mechanism to call.
+    openai_intent_client.py  Real implementation of intent parsing.
   rag/
     manifest.py             Loads + validates data/manifest.yaml; the
                           enforcement point for "no unlisted file".
@@ -242,7 +299,9 @@ app/
     citations.py            Numbered context blocks <-> structured
                           citations array; strips out-of-range [n] markers.
   api/
-    routes/               health, targets, plan, ask_v1, references, ask (legacy)
+    routes/               health, targets, plan (+ /v1/plan/alternatives,
+                          /v1/plan/edit, /v1/plan/chat), ask_v1, references,
+                          ask (legacy)
     schemas.py            pydantic request/response models
     mappers.py            domain dataclasses <-> API schemas
     deps.py               request-scoped deps (auth is a stub — see below)
